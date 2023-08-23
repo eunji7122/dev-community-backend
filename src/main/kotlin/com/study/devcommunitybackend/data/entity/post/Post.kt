@@ -1,6 +1,8 @@
 package com.study.devcommunitybackend.data.entity.post
 
 import com.study.devcommunitybackend.data.entity.base.BaseEntity
+import com.study.devcommunitybackend.data.entity.borad.Board
+import com.study.devcommunitybackend.data.entity.user.User
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime
@@ -11,8 +13,8 @@ import java.time.LocalDateTime
 class Post (
     title: String,
     content: String,
-    boardId: Long,
-    userId: Long,
+    board: Board,
+    user: User,
     viewCount: Int
 ) : BaseEntity() {
 
@@ -26,11 +28,13 @@ class Post (
     @Column(nullable = false)
     val content: String = content
 
-    @Column(nullable = false)
-    val boardId: Long = boardId
+    @ManyToOne
+    @JoinColumn(name = "board_id", nullable = false)
+    val board: Board = board
 
-    @Column(nullable = false)
-    val userId: Long = userId
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User = user
 
     @Column(nullable = false)
     val viewCount: Int = viewCount

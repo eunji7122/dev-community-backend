@@ -1,12 +1,15 @@
 package com.study.devcommunitybackend.data.entity.log
 
 import com.study.devcommunitybackend.data.entity.base.BaseEntity
+import com.study.devcommunitybackend.data.entity.comment.Comment
+import com.study.devcommunitybackend.data.entity.post.Post
+import com.study.devcommunitybackend.data.entity.user.User
 import jakarta.persistence.*
 
 @Entity
 @Table
 class PointLog (
-    userId: Long,
+    user: User,
     amount: Int
 ) : BaseEntity() {
 
@@ -14,16 +17,19 @@ class PointLog (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val userId: Long = userId
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val userId: User = user
 
     @Column(nullable = false)
     val amount: Int = amount
 
-    @Column(nullable = true)
-    val postId: Long? = null
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = true)
+    val post: Post? = null
 
-    @Column(nullable = true)
-    val commentId: Long? = null
+    @ManyToOne
+    @JoinColumn(name = "comment_id", nullable = true)
+    val comment: Comment? = null
 
 }

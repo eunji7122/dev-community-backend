@@ -1,22 +1,25 @@
 package com.study.devcommunitybackend.data.entity.post
 
+import com.study.devcommunitybackend.data.entity.user.User
 import jakarta.persistence.*
 
 @Entity
 @Table
 class PostLike (
-    postId: Long,
-    userId: Long
+    post: Post,
+    user: User
 ) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val postId: Long = postId
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    val post: Post = post
 
-    @Column(nullable = false)
-    val userId: Long = userId
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User = user
 
 }

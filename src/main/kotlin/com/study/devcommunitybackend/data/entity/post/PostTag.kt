@@ -6,18 +6,20 @@ import jakarta.persistence.*
 @Entity
 @Table
 class PostTag (
-    postId: Long,
-    tagId: Long
+    post: Post,
+    tag: Tag
 ) : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val postId: Long = postId
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    val post: Post = post
 
-    @Column(nullable = false)
-    val tagId: Long = tagId
+    @ManyToOne
+    @JoinColumn(name = "tag_id", nullable = false)
+    val tag: Tag = tag
 
 }

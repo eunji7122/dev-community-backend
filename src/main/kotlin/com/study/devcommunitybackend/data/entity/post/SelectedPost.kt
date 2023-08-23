@@ -1,12 +1,13 @@
 package com.study.devcommunitybackend.data.entity.post
 
+import com.study.devcommunitybackend.data.entity.comment.Comment
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 @Table
 class SelectedPost (
-    postId: Long,
+    post: Post,
     rewardPoint: Int,
 ) {
 
@@ -14,14 +15,16 @@ class SelectedPost (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val postId: Long = postId
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    val post: Post = post
 
     @Column(nullable = false)
     val rewardPoint: Int = rewardPoint
 
-    @Column(nullable = true)
-    val selectedCommentId: Long? = null
+    @ManyToOne
+    @JoinColumn(name = "selected_comment_id", nullable = true)
+    val selectedCommentId: Comment? = null
 
     @Column(nullable = true)
     val selectedAt: LocalDateTime? = null

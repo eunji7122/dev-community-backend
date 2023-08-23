@@ -5,8 +5,8 @@ import jakarta.persistence.*
 @Entity
 @Table
 class CommentClosureTable (
-    mainCommentId: Long,
-    subCommentId: Long,
+    mainComment: Comment,
+    subComment: Comment,
     depth: Int
 ) {
 
@@ -14,11 +14,13 @@ class CommentClosureTable (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val mainCommentId: Long = mainCommentId
+    @ManyToOne
+    @JoinColumn(name = "main_comment_id", nullable = false)
+    val mainComment: Comment = mainComment
 
-    @Column(nullable = false)
-    val subCommentId: Long = subCommentId
+    @ManyToOne
+    @JoinColumn(name = "sub_comment_id", nullable = false)
+    val subComment: Comment = subComment
 
     @Column(nullable = false)
     val depth: Int = depth

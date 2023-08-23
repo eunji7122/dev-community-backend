@@ -1,22 +1,25 @@
 package com.study.devcommunitybackend.data.entity.comment
 
 import com.study.devcommunitybackend.data.entity.base.BaseEntity
+import com.study.devcommunitybackend.data.entity.user.User
 import jakarta.persistence.*
 
 @Entity
 @Table
 class CommentLike (
-    commentId: Long,
-    userId: Long
+    comment: Comment,
+    user: User
 ) : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    @Column(nullable = false)
-    val commentId: Long = commentId
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    val comment: Comment = comment
 
-    @Column(nullable = false)
-    val userId: Long = userId
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User = user
 }

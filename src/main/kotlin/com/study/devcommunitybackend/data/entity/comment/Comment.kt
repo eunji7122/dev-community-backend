@@ -1,5 +1,7 @@
 package com.study.devcommunitybackend.data.entity.comment
 
+import com.study.devcommunitybackend.data.entity.post.Post
+import com.study.devcommunitybackend.data.entity.user.User
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.w3c.dom.Text
@@ -10,8 +12,8 @@ import java.time.LocalDateTime
 @SQLDelete(sql = "UPDATE comment SET deletedAt = NOW() WHERE id = ?")
 class Comment (
     content: String,
-    userId: Long,
-    postId: Long,
+    user: User,
+    post: Post,
 ){
 
     @Id
@@ -21,11 +23,13 @@ class Comment (
     @Column(nullable = false, columnDefinition = "TEXT")
     val content: String = content
 
-    @Column(nullable = false)
-    val userId: Long = userId
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User = user
 
-    @Column(nullable = false)
-    val postId: Long = postId
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    val post: Post = post
 
     @Column(nullable = true)
     val deletedAt: LocalDateTime? = null
