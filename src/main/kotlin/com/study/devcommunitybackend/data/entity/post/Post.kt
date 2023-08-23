@@ -1,6 +1,6 @@
 package com.study.devcommunitybackend.data.entity.post
 
-import com.study.devcommunitybackend.data.base.BaseEntity
+import com.study.devcommunitybackend.data.entity.base.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime

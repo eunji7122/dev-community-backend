@@ -1,4 +1,4 @@
-package com.study.devcommunitybackend.data.base
+package com.study.devcommunitybackend.data.entity.base
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
