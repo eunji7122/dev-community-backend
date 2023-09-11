@@ -6,8 +6,8 @@ import jakarta.persistence.*
 @Entity
 @Table
 class Board (
-    @Column(nullable = false) val name: String,
-    @Column(nullable = false) val usingStatus: Boolean
+    @Column(nullable = false) var name: String,
+    @Column(nullable = false) var usingStatus: Boolean
 ) : BaseEntity() {
 
     @Id

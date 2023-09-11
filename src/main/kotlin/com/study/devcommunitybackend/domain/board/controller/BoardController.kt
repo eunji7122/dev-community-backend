@@ -33,8 +33,8 @@ class BoardController (
         return ResponseEntity.status(HttpStatus.OK).body("Success to delete")
     }
 
-    @PutMapping("/{name}/update")
-    fun updateBoard(@PathVariable name: String, @RequestBody boardResponseDto: BoardResponseDto): ResponseEntity<BoardResponseDto> {
-        return ResponseEntity.status(HttpStatus.OK).body(boardService.updateBoard(name, boardResponseDto))
+    @PutMapping("/{id}/update")
+    fun updateBoard(@PathVariable id: Long, @RequestBody boardResponseDto: BoardResponseDto): ResponseEntity<BoardResponseDto> {
+        return ResponseEntity.status(HttpStatus.OK).body(boardService.updateBoard(id, boardResponseDto))
     }
 }

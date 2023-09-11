@@ -4,22 +4,26 @@ import com.study.devcommunitybackend.domain.board.data.dto.BoardResponseDto
 import com.study.devcommunitybackend.domain.board.data.entity.Board
 import com.study.devcommunitybackend.domain.board.repository.BoardRepository
 import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 @Transactional
-class BoardService (
-    private val boardRepository: BoardRepository
+class BoardService(
+    private val boardRepository: BoardRepository,
 ) {
 
-    fun createBoard(boardResponseDto: BoardResponseDto) : BoardResponseDto {
-        if (boardRepository.findByName(boardResponseDto.name) != null) {
-            throw RuntimeException()
+    fun createBoard(boardResponseDto: BoardResponseDto) : BoardResponseDto? {
+        val foundBoard = boardRepository.findByIdOrNull(boardResponseDto.id)
+        //boardRepository.findByBoardId(boardResponseDto.id)
+
+        if (foundBoard == null) {
+            val newBoard = Board(boardResponseDto.name, boardResponseDto.usingStatus)
+            val savedBoard = boardRepository.save(newBoard)
+            return BoardResponseDto.fromModel(savedBoard)
         }
 
-        val newBoard = Board(boardResponseDto.name, boardResponseDto.usingStatus)
-        val savedBoard = boardRepository.save(newBoard)
-        return BoardResponseDto.fromModel(savedBoard)
+        return null
     }
 
     fun getBoard(name: String) : BoardResponseDto? {
@@ -31,15 +35,17 @@ class BoardService (
         return boardRepository.findAll().stream().map { BoardResponseDto.fromModel(it) }.toList()
     }
 
-    fun updateBoard(name: String, boardResponseDto: BoardResponseDto) : BoardResponseDto {
-        val foundBoard = boardRepository.findByName(name)
+    fun updateBoard(id: Long, boardResponseDto: BoardResponseDto) : BoardResponseDto? {
+        val foundBoard = boardRepository.findByIdOrNull(id)
+
         if (foundBoard != null) {
-            boardRepository.delete(foundBoard)
+            foundBoard.name = boardResponseDto.name
+            foundBoard.usingStatus = boardResponseDto.usingStatus
+            boardRepository.save(foundBoard)
+            return BoardResponseDto.fromModel(foundBoard)
         }
 
-        val newBoard = Board(boardResponseDto.name, boardResponseDto.usingStatus)
-        val savedBoard = boardRepository.save(newBoard)
-        return BoardResponseDto.fromModel(savedBoard)
+        return null
     }
 
     fun deleteBoard(name: String) {
