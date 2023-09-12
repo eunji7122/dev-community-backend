@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface BoardRepository : JpaRepository<Board, Long>{
 
     fun findByName(name: String): Board?
-//    fun updateBoard(id: Int, name: String)
 }
 
 //fun BoardRepository.findByBoardId(id: Long): Board =

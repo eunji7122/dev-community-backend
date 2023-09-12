@@ -1,6 +1,6 @@
 package com.study.devcommunitybackend.domain.post.data.entity
 
-import com.study.devcommunitybackend.domain.base.entity.BaseEntity
+import com.study.devcommunitybackend.global.common.entity.BaseEntity
 import com.study.devcommunitybackend.domain.board.data.entity.Board
 import com.study.devcommunitybackend.domain.user.data.entity.User
 import jakarta.persistence.*

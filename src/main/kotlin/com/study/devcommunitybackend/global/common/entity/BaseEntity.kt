@@ -1,4 +1,4 @@
-package com.study.devcommunitybackend.domain.base.entity
+package com.study.devcommunitybackend.global.common.entity
 
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
