@@ -1,7 +1,7 @@
 package com.study.devcommunitybackend.domain.comment.data.entity
 
 import com.study.devcommunitybackend.domain.post.data.entity.Post
-import com.study.devcommunitybackend.domain.user.data.entity.User
+import com.study.devcommunitybackend.domain.member.data.entity.Member
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime
@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 @SQLDelete(sql = "UPDATE comment SET deletedAt = NOW() WHERE id = ?")
 class Comment (
     @Column(nullable = false, columnDefinition = "TEXT") val content: String,
-    @ManyToOne @JoinColumn(name = "user_id", nullable = false) val user: User,
+    @ManyToOne @JoinColumn(name = "user_id", nullable = false) val member: Member,
     @ManyToOne @JoinColumn(name = "post_id", nullable = false) val post: Post,
 ){
 

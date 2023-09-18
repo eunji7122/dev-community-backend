@@ -1,15 +1,15 @@
 package com.study.devcommunitybackend.domain.log.entity
 
-import com.study.devcommunitybackend.global.common.entity.BaseEntity
+import com.study.devcommunitybackend.common.data.entity.BaseEntity
 import com.study.devcommunitybackend.domain.comment.data.entity.Comment
 import com.study.devcommunitybackend.domain.post.data.entity.Post
-import com.study.devcommunitybackend.domain.user.data.entity.User
+import com.study.devcommunitybackend.domain.member.data.entity.Member
 import jakarta.persistence.*
 
 @Entity
 @Table
 class PointLog (
-    user: User,
+    member: Member,
     @Column(nullable = false) val amount: Int
 ) : BaseEntity() {
 
@@ -19,7 +19,7 @@ class PointLog (
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    val userId: User = user
+    val memberId: Member = member
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = true)

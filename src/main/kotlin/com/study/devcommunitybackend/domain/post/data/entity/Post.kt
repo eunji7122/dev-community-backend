@@ -1,8 +1,8 @@
 package com.study.devcommunitybackend.domain.post.data.entity
 
-import com.study.devcommunitybackend.global.common.entity.BaseEntity
+import com.study.devcommunitybackend.common.data.entity.BaseEntity
 import com.study.devcommunitybackend.domain.board.data.entity.Board
-import com.study.devcommunitybackend.domain.user.data.entity.User
+import com.study.devcommunitybackend.domain.member.data.entity.Member
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDateTime
@@ -14,7 +14,7 @@ class Post (
     @Column(nullable = false) val title: String,
     @Column(nullable = false) val content: String,
     @ManyToOne @JoinColumn(name = "board_id", nullable = false) val board: Board,
-    @ManyToOne @JoinColumn(name = "user_id", nullable = false) val user: User,
+    @ManyToOne @JoinColumn(name = "user_id", nullable = false) val member: Member,
     @Column(nullable = false) val viewCount: Int
 ) : BaseEntity() {
 

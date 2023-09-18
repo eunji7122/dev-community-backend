@@ -1,12 +1,12 @@
 package com.study.devcommunitybackend.domain.auth.data
 
-import com.study.devcommunitybackend.domain.user.data.entity.User
+import com.study.devcommunitybackend.domain.member.data.entity.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 
 class PrincipalDetails (
-    val user: User
+    val member: Member
 ): UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
@@ -14,12 +14,12 @@ class PrincipalDetails (
     }
 
     override fun getPassword(): String {
-        return user.password
+        return member.password
     }
 
     override fun getUsername(): String {
         // 사용자 아이디 반환
-        return user.email
+        return member.loginId
     }
 
     override fun isAccountNonExpired(): Boolean {
