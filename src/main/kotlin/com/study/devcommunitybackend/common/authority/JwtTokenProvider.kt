@@ -17,6 +17,7 @@ const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
 
 @Component
 class JwtTokenProvider {
+
     @Value("\${jwt.secret}")
     lateinit var secretKey: String
     val accessTokenValidMillisecond: Long = 1000L * 60 * 60
@@ -25,11 +26,6 @@ class JwtTokenProvider {
     private val key by lazy {
         Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey))
     }
-
-//    @PostConstruct
-//    protected fun init()  {
-//        secretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray(StandardCharsets.UTF_8));
-//    }
 
     /**
      * token 생성

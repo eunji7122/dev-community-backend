@@ -36,7 +36,7 @@ class MemberService (
         }
 
         // 사용자 정보 저장
-        member = memberRequestDto.toEntity()
+        member = memberRequestDto.toEntity(bCryptPasswordEncoder)
         memberRepository.save(member)
 
         // 사용자 권한 저장
@@ -67,7 +67,7 @@ class MemberService (
      * 내 정보 수정
      */
     fun saveMyInfo(memberDtoRequest: MemberRequestDto): String {
-        val member = memberDtoRequest.toEntity()
+        val member = memberDtoRequest.toEntity(bCryptPasswordEncoder)
         memberRepository.save(member)
         return "수정 완료되었습니다."
     }
