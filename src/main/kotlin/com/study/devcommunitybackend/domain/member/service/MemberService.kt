@@ -1,7 +1,7 @@
 package com.study.devcommunitybackend.domain.member.service
 
 import com.study.devcommunitybackend.common.authority.JwtTokenProvider
-import com.study.devcommunitybackend.common.authority.TokenDto
+import com.study.devcommunitybackend.common.data.dto.TokenDto
 import com.study.devcommunitybackend.common.exception.InvalidInputException
 import com.study.devcommunitybackend.domain.member.data.dto.LoginMemberRequestDto
 import com.study.devcommunitybackend.domain.member.data.dto.MemberRequestDto
@@ -50,9 +50,9 @@ class MemberService (
      * 로그인
      */
     fun login(loginDto: LoginMemberRequestDto): TokenDto {
-        val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, loginDto.password)
+        val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, bCryptPasswordEncoder.encode(loginDto.password))
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-        return jwtTokenProvider.createToken(authentication)
+        return TokenDto(jwtTokenProvider.createToken(authentication), jwtTokenProvider.createRefreshToken(authentication))
     }
 
     /**

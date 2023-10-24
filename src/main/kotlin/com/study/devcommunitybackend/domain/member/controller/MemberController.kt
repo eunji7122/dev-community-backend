@@ -1,8 +1,8 @@
 package com.study.devcommunitybackend.domain.member.controller
 
-import com.study.devcommunitybackend.common.authority.TokenDto
 import com.study.devcommunitybackend.common.data.dto.BaseResponseDto
 import com.study.devcommunitybackend.common.data.dto.CustomUser
+import com.study.devcommunitybackend.common.data.dto.TokenDto
 import com.study.devcommunitybackend.domain.member.data.dto.LoginMemberRequestDto
 import com.study.devcommunitybackend.domain.member.data.dto.MemberRequestDto
 import com.study.devcommunitybackend.domain.member.data.dto.MemberResponseDto

@@ -79,6 +79,7 @@ data class MemberRequestDto(
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     fun toEntity(bCryptPasswordEncoder: BCryptPasswordEncoder): Member =
+//        Member(id, loginId, password, name, email, birthDate, gender, point)
         Member(id, loginId, bCryptPasswordEncoder.encode(password), name, email, birthDate, gender, point)
 
 

@@ -16,10 +16,13 @@ import java.util.*
 const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
 
 @Component
-class JwtTokenProvider {
+class JwtTokenProvider (
+//    private val customUserDetailsService: CustomUserDetailsService
+) {
 
     @Value("\${jwt.secret}")
     lateinit var secretKey: String
+
     val accessTokenValidMillisecond: Long = 1000L * 60 * 60
     val refreshTokenValidMillisecond: Long = 14 * 24 * 60 * 60 * 1000L
 
@@ -30,15 +33,14 @@ class JwtTokenProvider {
     /**
      * token 생성
      */
-    fun createToken(authentication: Authentication): TokenDto {
+    fun createToken(authentication: Authentication): String {
         val authorities: String = authentication
             .authorities
             .joinToString(",", transform = GrantedAuthority::getAuthority)
         val now = Date()
         val accessExpiration = Date(now.time + EXPIRATION_MILLISECONDS)
 
-        // Access Token
-        val accessToken = Jwts.builder()
+        return Jwts.builder()
             .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
             .claim("userId", (authentication.principal as CustomUser).userId) // 유저 id 저장
@@ -46,9 +48,29 @@ class JwtTokenProvider {
             .setExpiration(accessExpiration) // 만료 시간
             .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘
             .compact()
-
-        return TokenDto("Bearer", accessToken)
+//        return TokenDto("Bearer", accessToken)
     }
+
+    /**
+     * refresh token 생성
+     */
+    fun createRefreshToken(authentication: Authentication): String {
+        val authorities: String = authentication
+            .authorities
+            .joinToString(",", transform = GrantedAuthority::getAuthority)
+        val now = Date()
+        val accessExpiration = Date(now.time + refreshTokenValidMillisecond)
+
+        return Jwts.builder()
+            .setSubject(authentication.name)
+            .claim("auth", authorities) // 권한 정보 저장
+            .claim("userId", (authentication.principal as CustomUser).userId) // 유저 id 저장
+            .setIssuedAt(now) // 발행 시간
+            .setExpiration(accessExpiration) // 만료 시간
+            .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘
+            .compact()
+    }
+
 
     /**
      * token 정보 추출
@@ -65,6 +87,7 @@ class JwtTokenProvider {
 
         val principal: UserDetails =
             CustomUser(userId.toString().toLong(), claims.subject, "", authorities)
+//        val principal: UserDetails = customUserDetailsService.loadUserByUsername(token)
 
         return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }
