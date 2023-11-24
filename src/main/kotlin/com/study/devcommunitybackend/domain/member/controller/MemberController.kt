@@ -2,8 +2,6 @@ package com.study.devcommunitybackend.domain.member.controller
 
 import com.study.devcommunitybackend.common.data.dto.BaseResponseDto
 import com.study.devcommunitybackend.common.data.dto.CustomUser
-import com.study.devcommunitybackend.common.data.dto.TokenDto
-import com.study.devcommunitybackend.domain.member.data.dto.LoginMemberRequestDto
 import com.study.devcommunitybackend.domain.member.data.dto.MemberRequestDto
 import com.study.devcommunitybackend.domain.member.data.dto.MemberResponseDto
 import com.study.devcommunitybackend.domain.member.service.MemberService
@@ -16,24 +14,6 @@ import org.springframework.web.bind.annotation.*
 class MemberController (
     private val memberService: MemberService
 ) {
-
-    /**
-     * 회원가입
-     */
-    @PostMapping("/signup")
-    fun signUp(@RequestBody @Valid memberDtoRequest: MemberRequestDto): BaseResponseDto<Unit> {
-        val resultMsg: String = memberService.signUp(memberDtoRequest)
-        return BaseResponseDto(message = resultMsg)
-    }
-
-    /**
-     * 로그인
-     */
-    @PostMapping("/login")
-    fun login(@RequestBody @Valid loginDto: LoginMemberRequestDto): BaseResponseDto<TokenDto> {
-        val tokenInfo = memberService.login(loginDto)
-        return BaseResponseDto(data = tokenInfo)
-    }
 
     /**
      * 내 정보 보기
