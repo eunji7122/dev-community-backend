@@ -9,7 +9,7 @@ data class BoardResponseDto(
 ) {
     companion object {
         fun fromModel(board: Board): BoardResponseDto {
-            return BoardResponseDto(board.id, board.name, board.usingStatus)
+            return BoardResponseDto(board.id!!, board.name, board.usingStatus)
         }
     }
 }

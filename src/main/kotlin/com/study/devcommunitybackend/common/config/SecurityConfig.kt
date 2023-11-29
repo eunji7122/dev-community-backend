@@ -57,7 +57,8 @@ class SecurityConfig (
                             mvcMatcherBuilder.pattern("/signUp"),
                             mvcMatcherBuilder.pattern("/signIn"),
                     ).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern("/member/info")).hasRole("MEMBER")
+                        .requestMatchers(mvcMatcherBuilder.pattern("/member/info")).hasAnyRole("MEMBER", "ADMIN")
+                        .requestMatchers(mvcMatcherBuilder.pattern("/posts")).hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/boards")).hasRole("ADMIN")
 //                    .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/profile/*")).permitAll()
                     .anyRequest().authenticated()
