@@ -19,10 +19,12 @@ class Comment (
         @Column(nullable = false, columnDefinition = "TEXT")
         var contents: String,
 
-        @ManyToOne @JoinColumn(name = "user_id", nullable = false)
+        @ManyToOne
+        @JoinColumn(name = "user_id", nullable = false)
         val member: Member,
 
-        @ManyToOne @JoinColumn(name = "post_id", nullable = false)
+        @ManyToOne
+        @JoinColumn(name = "post_id", nullable = false)
         val post: Post,
 ) : BaseEntity() {
 
