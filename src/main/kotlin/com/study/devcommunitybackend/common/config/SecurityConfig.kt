@@ -60,6 +60,7 @@ class SecurityConfig (
                         .requestMatchers(mvcMatcherBuilder.pattern("/member/info")).hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/posts")).hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/boards")).hasRole("ADMIN")
+                        .requestMatchers(mvcMatcherBuilder.pattern("/comments")).hasAnyRole("MEMBER", "ADMIN")
 //                    .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/profile/*")).permitAll()
                     .anyRequest().authenticated()
                 }
