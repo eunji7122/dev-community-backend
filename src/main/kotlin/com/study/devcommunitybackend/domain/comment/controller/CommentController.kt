@@ -20,13 +20,13 @@ class CommentController (
     }
 
     @GetMapping()
-    fun getAllCommentByPostId(@RequestBody commentRequestDto: CommentRequestDto) : BaseResponseDto<List<CommentResponseDto>> {
+    fun getAllCommentByPostId(@RequestBody commentRequestDto: CommentRequestDto) : BaseResponseDto<ArrayList<Any>> {
         val comments = commentService.getAllCommentByPostId(commentRequestDto)
         return BaseResponseDto(data = comments)
     }
 
     @GetMapping("/{id}")
-    fun getComment(@PathVariable id: Long): BaseResponseDto<CommentResponseDto> {
+    fun getComment(@PathVariable id: Long): BaseResponseDto<MutableMap<String, Any>> {
         val comment = commentService.getComment(id)
         val message = if (comment == null) "삭제되었거나 존재하지 않는 댓글입니다." else ResultCode.SUCCESS.msg
         return BaseResponseDto(data = comment, message = message)

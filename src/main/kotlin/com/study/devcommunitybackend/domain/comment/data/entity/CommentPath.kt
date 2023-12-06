@@ -1,11 +1,11 @@
 package com.study.devcommunitybackend.domain.comment.data.entity
 
-import com.study.devcommunitybackend.domain.comment.data.dto.CommentClosureResponseDto
+import com.study.devcommunitybackend.domain.comment.data.dto.CommentPathResponseDto
 import jakarta.persistence.*
 
 @Entity
 @Table
-class CommentClosureTable (
+class CommentPath (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
@@ -19,6 +19,6 @@ class CommentClosureTable (
         val subComment: Comment,
 ) {
 
-        fun toDto(): CommentClosureResponseDto = CommentClosureResponseDto(id!!, mainComment.toDto(), subComment.toDto())
+        fun toDto(): CommentPathResponseDto = CommentPathResponseDto(id!!, mainComment.toDto(), subComment.toDto())
 
 }

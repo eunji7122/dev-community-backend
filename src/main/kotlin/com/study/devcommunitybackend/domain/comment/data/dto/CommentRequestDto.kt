@@ -20,6 +20,8 @@ data class CommentRequestDto(
         @field:NotBlank
         @JsonProperty("postId")
         private val _postId: Long?,
+
+        val mainCommentId: Long?,
 ) {
         val contents: String
                 get() = _contents!!

@@ -31,6 +31,6 @@ class Comment (
     @Column(nullable = true)
     val deletedAt: LocalDateTime? = null
 
-    fun toDto(): CommentResponseDto = CommentResponseDto(id!!, contents, member.toDto(), post.toDto())
+    fun toDto(): CommentResponseDto = CommentResponseDto(id!!, contents)
 
 }

@@ -2,10 +2,10 @@ package com.study.devcommunitybackend.domain.comment.data.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.study.devcommunitybackend.domain.comment.data.entity.Comment
-import com.study.devcommunitybackend.domain.comment.data.entity.CommentClosureTable
+import com.study.devcommunitybackend.domain.comment.data.entity.CommentPath
 import jakarta.validation.constraints.NotBlank
 
-data class CommentClosureRequestDto(
+data class CommentPathRequestDto(
         val id: Long?,
 
         @field:NotBlank
@@ -22,5 +22,5 @@ data class CommentClosureRequestDto(
     val subCommentId: Long
         get() = _subCommentId!!
 
-    fun toEntity(mainComment: Comment, subComment: Comment) : CommentClosureTable = CommentClosureTable(id, mainComment, subComment)
+    fun toEntity(mainComment: Comment, subComment: Comment) : CommentPath = CommentPath(id, mainComment, subComment)
 }
