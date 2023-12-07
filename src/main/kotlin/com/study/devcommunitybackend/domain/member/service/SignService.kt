@@ -10,6 +10,8 @@ import com.study.devcommunitybackend.domain.member.data.entity.MemberRole
 import com.study.devcommunitybackend.domain.member.data.entity.Role
 import com.study.devcommunitybackend.domain.member.repository.MemberRepository
 import com.study.devcommunitybackend.domain.member.repository.MemberRoleRepository
+import com.study.devcommunitybackend.domain.point.data.entity.Point
+import com.study.devcommunitybackend.domain.point.repository.PointRepository
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -19,10 +21,13 @@ import org.springframework.stereotype.Service
 class SignService (
         private val memberRepository: MemberRepository,
         private val memberRoleRepository: MemberRoleRepository,
+        private val pointRepository: PointRepository,
         private val jwtTokenProvider: JwtTokenProvider,
         private val authenticationManagerBuilder: AuthenticationManagerBuilder,
         private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) {
+
+    val defaultPointValue = 0;
 
     /**
      * 회원가입
@@ -40,6 +45,9 @@ class SignService (
         // 사용자 권한 저장
         val memberRole = MemberRole(Role.MEMBER, member)
         memberRoleRepository.save(memberRole)
+
+        // 포인트 저장
+        pointRepository.save(Point(null, member, defaultPointValue))
 
         return "회원가입이 완료되었습니다."
     }

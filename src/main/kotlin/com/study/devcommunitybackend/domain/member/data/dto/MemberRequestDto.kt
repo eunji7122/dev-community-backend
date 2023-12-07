@@ -49,10 +49,6 @@ data class MemberRequestDto(
     @JsonProperty("gender")
     private val _gender: String?,
 
-    @field:NotNull(message = "-1")
-    @JsonProperty("point")
-    private val _point: Int?,
-
 ) {
     val loginId: String
         get() = _loginId!!
@@ -72,15 +68,12 @@ data class MemberRequestDto(
     val gender: Gender
         get() = Gender.valueOf(_gender!!)
 
-    val point: Int
-        get() = _point!!
-
     private fun String.toLocalDate(): LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     fun toEntity(bCryptPasswordEncoder: BCryptPasswordEncoder): Member =
-//        Member(id, loginId, password, name, email, birthDate, gender, point)
-        Member(id, loginId, bCryptPasswordEncoder.encode(password), name, email, birthDate, gender, point)
+//        Member(id, loginId, password, name, email, birthDate, gender)
+        Member(id, loginId, bCryptPasswordEncoder.encode(password), name, email, birthDate, gender)
 
 
 //    companion object {

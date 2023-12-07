@@ -34,8 +34,6 @@ class Member(
     @Enumerated(EnumType.STRING)
     val gender: Gender,
 
-    @Column(nullable = false)
-    var point: Int
 ) : BaseEntity() {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
@@ -52,7 +50,6 @@ class Member(
             email,
             birthDate.formatDate(),
             gender.desc,
-            point
         )
 
 }

@@ -7,5 +7,4 @@ data class MemberResponseDto(
     val email: String,
     val birthDate: String,
     val gender: String,
-    val point: Int,
 )
