@@ -1,6 +1,8 @@
 package com.study.devcommunitybackend.common.authority
 
 import com.study.devcommunitybackend.common.data.dto.CustomUser
+import com.study.devcommunitybackend.domain.auth.data.entity.RefreshToken
+import com.study.devcommunitybackend.domain.auth.repository.RefreshTokenRepository
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -13,11 +15,14 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
 
-const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
+//const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
+const val EXPIRATION_MILLISECONDS: Long = 10000
 
 @Component
 class JwtTokenProvider (
 //    private val customUserDetailsService: CustomUserDetailsService
+    private val refreshTokenRepository: RefreshTokenRepository
+
 ) {
 
     @Value("\${jwt.secret}")
@@ -61,7 +66,7 @@ class JwtTokenProvider (
         val now = Date()
         val accessExpiration = Date(now.time + refreshTokenValidMillisecond)
 
-        return Jwts.builder()
+        val refreshToken = Jwts.builder()
             .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
             .claim("userId", (authentication.principal as CustomUser).userId) // 유저 id 저장
@@ -69,6 +74,16 @@ class JwtTokenProvider (
             .setExpiration(accessExpiration) // 만료 시간
             .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘
             .compact()
+
+        val foundDbRefreshToken = refreshTokenRepository.findByUsername(authentication.name)
+        if (foundDbRefreshToken != null) {
+            foundDbRefreshToken.token = refreshToken
+            refreshTokenRepository.save(foundDbRefreshToken)
+        } else {
+            refreshTokenRepository.save(RefreshToken(null, authentication.name, refreshToken))
+        }
+
+        return refreshToken
     }
 
 
@@ -109,8 +124,8 @@ class JwtTokenProvider (
                 else -> {} // else
             }
             println(e.message)
+            throw e
         }
-        return false
     }
 
     private fun getClaims(token: String): Claims =

@@ -15,7 +15,7 @@ class BoardServiceTest @Autowired constructor(
     fun createBoard() {
 
         //given TODO("테스트 대상을 만들더 준비하는 과정")
-        val newBoard = Board("test", true)
+        val newBoard = Board(null,"test", true)
 
         //when TODO("실제 우리가 테스트하고 싶은 기능을 호출하는 과정")
         boardRepository.save(newBoard)

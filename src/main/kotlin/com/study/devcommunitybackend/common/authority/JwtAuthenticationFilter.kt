@@ -14,10 +14,17 @@ class JwtAuthenticationFilter(
 
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
         val token = resolveToken(request as HttpServletRequest)
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            val authentication = jwtTokenProvider.getAuthentication(token)
-            SecurityContextHolder.getContext().authentication = authentication
+
+        // 토큰이 null이고 요청이 회원가입/로그인/토큰재발급인 경우 처리?
+        try {
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                val authentication = jwtTokenProvider.getAuthentication(token)
+                SecurityContextHolder.getContext().authentication = authentication
+            }
+        } catch (e: Exception) {
+            request.setAttribute("exception", e)
         }
+
         chain?.doFilter(request, response)
     }
 

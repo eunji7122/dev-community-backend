@@ -12,8 +12,10 @@ import com.study.devcommunitybackend.domain.member.repository.MemberRepository
 import com.study.devcommunitybackend.domain.member.repository.MemberRoleRepository
 import com.study.devcommunitybackend.domain.point.data.entity.Point
 import com.study.devcommunitybackend.domain.point.repository.PointRepository
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -58,7 +60,7 @@ class SignService (
     fun signIn(loginDto: LoginMemberRequestDto): TokenDto {
         val member: Member? = memberRepository.findByLoginId(loginDto.loginId)
         if (!bCryptPasswordEncoder.matches(loginDto.password, member!!.password)) {
-            throw RuntimeException()
+            throw UsernameNotFoundException("아이디 혹은 비밀번호를 확인하세요.")
         }
         val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member.password)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)

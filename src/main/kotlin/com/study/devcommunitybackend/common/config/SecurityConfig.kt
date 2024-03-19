@@ -1,5 +1,7 @@
 package com.study.devcommunitybackend.common.config
 
+import com.study.devcommunitybackend.common.authority.CustomAccessDeniedHandler
+import com.study.devcommunitybackend.common.authority.CustomAuthenticationEntryPoint
 import com.study.devcommunitybackend.common.authority.JwtAuthenticationFilter
 import com.study.devcommunitybackend.common.authority.JwtTokenProvider
 import org.springframework.context.annotation.Bean
@@ -17,7 +19,9 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 @Configuration
 @EnableMethodSecurity
 class SecurityConfig (
-        private val jwtTokenProvider: JwtTokenProvider,
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
+    private val customAccessDeniedHandler: CustomAccessDeniedHandler,
 ) {
 
 //    private val AUTH_WHITELIST = arrayOf(
@@ -46,28 +50,29 @@ class SecurityConfig (
 //        return http.build()
         val mvcMatcherBuilder = MvcRequestMatcher.Builder(introspector)
         http
-                .httpBasic { it.disable() }
-                .csrf { it.disable() }
-                .sessionManagement {
-                    it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                }
-                .authorizeHttpRequests{ requests -> requests
-                    .requestMatchers(
-                            mvcMatcherBuilder.pattern("/"),
-                            mvcMatcherBuilder.pattern("/signUp"),
-                            mvcMatcherBuilder.pattern("/signIn"),
-                    ).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern("/member/info")).hasAnyRole("MEMBER", "ADMIN")
-                        .requestMatchers(mvcMatcherBuilder.pattern("/posts")).hasAnyRole("MEMBER", "ADMIN")
-                        .requestMatchers(mvcMatcherBuilder.pattern("/boards")).hasRole("ADMIN")
-                        .requestMatchers(mvcMatcherBuilder.pattern("/comments")).hasAnyRole("MEMBER", "ADMIN")
+            .httpBasic { it.disable() }
+            .csrf { it.disable() }
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .authorizeHttpRequests{ requests -> requests
+                .requestMatchers(
+                        mvcMatcherBuilder.pattern("/"),
+                        mvcMatcherBuilder.pattern("/signUp"),
+                        mvcMatcherBuilder.pattern("/signIn"),
+                    mvcMatcherBuilder.pattern("/auth/reissue"),
+                ).permitAll()
+                    .requestMatchers(mvcMatcherBuilder.pattern("/member/info")).hasAnyRole("MEMBER", "ADMIN")
+                    .requestMatchers(mvcMatcherBuilder.pattern("/posts")).hasAnyRole("MEMBER", "ADMIN")
+                    .requestMatchers(mvcMatcherBuilder.pattern("/boards")).hasRole("ADMIN")
+                    .requestMatchers(mvcMatcherBuilder.pattern("/comments")).hasAnyRole("MEMBER", "ADMIN")
 //                    .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/profile/*")).permitAll()
-                    .anyRequest().authenticated()
-                }
-                .addFilterBefore(
-                JwtAuthenticationFilter(jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter::class.java
-                )
+                .anyRequest().authenticated()
+            }
+            .addFilterBefore(JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+            .exceptionHandling { it.authenticationEntryPoint(customAuthenticationEntryPoint) }
+            .exceptionHandling { it.accessDeniedHandler(customAccessDeniedHandler) }
+
 
         return http.build()
     }
