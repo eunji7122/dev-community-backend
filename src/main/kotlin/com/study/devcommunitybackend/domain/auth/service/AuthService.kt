@@ -34,7 +34,7 @@ class AuthService(
             refreshTokenRepository.save(RefreshToken(null, authentication.name, newRefreshToken))
         }
 
-        return TokenDto(jwtTokenProvider.createToken(authentication), newRefreshToken)
+        return TokenDto(jwtTokenProvider.createAccessToken(authentication), newRefreshToken)
     }
 
 //    fun createAuthToken(loginMemberRequestDto: LoginMemberRequestDto): AuthTokenResponseDto {

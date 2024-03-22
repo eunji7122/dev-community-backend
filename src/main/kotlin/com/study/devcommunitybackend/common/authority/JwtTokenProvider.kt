@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -38,17 +39,23 @@ class JwtTokenProvider (
     /**
      * token 생성
      */
-    fun createToken(authentication: Authentication): String {
+    fun createAccessToken(authentication: Authentication): String {
         val authorities: String = authentication
             .authorities
             .joinToString(",", transform = GrantedAuthority::getAuthority)
         val now = Date()
         val accessExpiration = Date(now.time + EXPIRATION_MILLISECONDS)
 
+        var userId = ""
+        when (authentication.principal) {
+            is CustomUser -> userId = (authentication.principal as CustomUser).userId.toString() // 기본 로그인
+            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).name // 소셜 로그인
+        }
+
         return Jwts.builder()
             .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
-            .claim("userId", (authentication.principal as CustomUser).userId) // 유저 id 저장
+            .claim("userId", userId) // 유저 id 저장
             .setIssuedAt(now) // 발행 시간
             .setExpiration(accessExpiration) // 만료 시간
             .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘
@@ -66,10 +73,16 @@ class JwtTokenProvider (
         val now = Date()
         val accessExpiration = Date(now.time + refreshTokenValidMillisecond)
 
+        var userId = ""
+        when (authentication.principal) {
+            is CustomUser -> userId = (authentication.principal as CustomUser).userId.toString() // 기본 로그인
+            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).name // 소셜 로그인
+        }
+
         val refreshToken = Jwts.builder()
             .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
-            .claim("userId", (authentication.principal as CustomUser).userId) // 유저 id 저장
+            .claim("userId", userId) // 유저 id 저장
             .setIssuedAt(now) // 발행 시간
             .setExpiration(accessExpiration) // 만료 시간
             .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘

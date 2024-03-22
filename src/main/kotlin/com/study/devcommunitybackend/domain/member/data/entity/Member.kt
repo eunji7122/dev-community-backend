@@ -26,15 +26,23 @@ class Member(
     @Column(nullable = false, length = 30)
     val email: String,
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.DATE) // 날짜 형식만 입력 받음
-    val birthDate: LocalDate,
+    val birthDate: LocalDate?,
 
-    @Column(nullable = false, length = 5)
+    @Column(nullable = true, length = 5)
     @Enumerated(EnumType.STRING)
-    val gender: Gender,
+    val gender: Gender?,
 
-) : BaseEntity() {
+    // OAuth2의 어떤 Social 플랫폼을 이용하는지
+    @Column(nullable = true)
+    val provider: String?,
+
+    // OAuth2가 제공하는 ID
+    @Column(nullable = true)
+    val providerId: String?,
+
+    ) : BaseEntity() {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     val memberRole: List<MemberRole>? = null
@@ -48,8 +56,8 @@ class Member(
             loginId,
             name,
             email,
-            birthDate.formatDate(),
-            gender.desc,
+            birthDate!!.formatDate(),
+            gender!!.desc,
         )
 
 }

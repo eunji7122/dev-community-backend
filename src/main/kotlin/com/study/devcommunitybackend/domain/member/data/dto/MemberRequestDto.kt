@@ -6,7 +6,6 @@ import com.study.devcommunitybackend.domain.member.data.entity.Gender
 import com.study.devcommunitybackend.domain.member.data.entity.Member
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.time.LocalDate
@@ -73,7 +72,7 @@ data class MemberRequestDto(
 
     fun toEntity(bCryptPasswordEncoder: BCryptPasswordEncoder): Member =
 //        Member(id, loginId, password, name, email, birthDate, gender)
-        Member(id, loginId, bCryptPasswordEncoder.encode(password), name, email, birthDate, gender)
+        Member(id, loginId, bCryptPasswordEncoder.encode(password), name, email, birthDate, gender, null, null)
 
 
 //    companion object {

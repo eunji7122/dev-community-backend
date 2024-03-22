@@ -12,7 +12,6 @@ import com.study.devcommunitybackend.domain.member.repository.MemberRepository
 import com.study.devcommunitybackend.domain.member.repository.MemberRoleRepository
 import com.study.devcommunitybackend.domain.point.data.entity.Point
 import com.study.devcommunitybackend.domain.point.repository.PointRepository
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -64,7 +63,7 @@ class SignService (
         }
         val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member.password)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-        return TokenDto(jwtTokenProvider.createToken(authentication), jwtTokenProvider.createRefreshToken(authentication))
+        return TokenDto(jwtTokenProvider.createAccessToken(authentication), jwtTokenProvider.createRefreshToken(authentication))
     }
 
 }
