@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 //const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 12
-const val EXPIRATION_MILLISECONDS: Long = 10000
+const val EXPIRATION_MILLISECONDS: Long = 60000 // 1000 = 1초
 
 @Component
 class JwtTokenProvider (
@@ -49,18 +49,17 @@ class JwtTokenProvider (
         var userId = ""
         when (authentication.principal) {
             is CustomUser -> userId = (authentication.principal as CustomUser).userId.toString() // 기본 로그인
-            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).name // 소셜 로그인
+            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).attributes["userId"].toString() // 소셜 로그인
         }
 
         return Jwts.builder()
-            .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
+            .setSubject(authentication.name)
             .claim("userId", userId) // 유저 id 저장
             .setIssuedAt(now) // 발행 시간
             .setExpiration(accessExpiration) // 만료 시간
             .signWith(key, SignatureAlgorithm.HS256) // 암호화 알고리즘
             .compact()
-//        return TokenDto("Bearer", accessToken)
     }
 
     /**
@@ -76,12 +75,12 @@ class JwtTokenProvider (
         var userId = ""
         when (authentication.principal) {
             is CustomUser -> userId = (authentication.principal as CustomUser).userId.toString() // 기본 로그인
-            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).name // 소셜 로그인
+            is DefaultOAuth2User -> userId = (authentication.principal as DefaultOAuth2User).attributes["userId"].toString() // 소셜 로그인
         }
 
         val refreshToken = Jwts.builder()
-            .setSubject(authentication.name)
             .claim("auth", authorities) // 권한 정보 저장
+            .setSubject(authentication.name)
             .claim("userId", userId) // 유저 id 저장
             .setIssuedAt(now) // 발행 시간
             .setExpiration(accessExpiration) // 만료 시간

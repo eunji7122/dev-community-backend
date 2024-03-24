@@ -1,8 +1,6 @@
 package com.study.devcommunitybackend.common.service
 
 import com.study.devcommunitybackend.common.data.dto.OAuthAttributes
-import com.study.devcommunitybackend.common.exception.InvalidInputException
-import com.study.devcommunitybackend.domain.auth.data.PrincipalDetails
 import com.study.devcommunitybackend.domain.member.data.entity.Gender
 import com.study.devcommunitybackend.domain.member.data.entity.Member
 import com.study.devcommunitybackend.domain.member.data.entity.MemberRole
@@ -42,6 +40,7 @@ class CustomOAuth2UserService (
 
         // 회원 정보가 없으면 회원가입
         val member: Member? = memberRepository.findByLoginId(attributes!!.email)
+        var userId = member?.id
         if (member == null) {
             val memberEntity = Member(
                 id = null,
@@ -54,12 +53,12 @@ class CustomOAuth2UserService (
                 provider = registrationId,
                 providerId = oAuth2User.attributes["sub"].toString()
             )
-
+            userId = memberEntity.id
             memberRepository.save(memberEntity)
             memberRoleRepository.save(MemberRole(Role.MEMBER, memberEntity))
         }
 
 //        return oAuth2User
-        return DefaultOAuth2User(Collections.singleton(SimpleGrantedAuthority("ROLE_USER")), attributes.convertToMap(), "email")
+        return DefaultOAuth2User(Collections.singleton(SimpleGrantedAuthority("ROLE_MEMBER")), attributes.convertToMap(userId!!), "email")
     }
 }

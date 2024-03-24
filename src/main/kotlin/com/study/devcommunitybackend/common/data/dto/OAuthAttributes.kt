@@ -31,7 +31,7 @@ data class OAuthAttributes (
         }
 
         fun ofNaver(registrationId: String, userNameAttributeKey: String, attributes: Map<String, Any>): OAuthAttributes {
-            val response = attributes["response"] as Map<String, Any>
+            val response = attributes["response"] as Map<*, *>
 
             return OAuthAttributes(
                 name = response["name"] as String,
@@ -43,7 +43,7 @@ data class OAuthAttributes (
         }
     }
 
-    fun convertToMap(): Map<String, Any> {
+    fun convertToMap(userId: Long): Map<String, Any> {
         val map = HashMap<String, Any>()
         map["id"] = nameAttributeKey
         map["key"] = nameAttributeKey
@@ -51,6 +51,7 @@ data class OAuthAttributes (
         map["name"] = name
         map["picture"] = picture
         map["provider"] = provider
+        map["userId"] = userId
         return map
     }
 }

@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
@@ -33,6 +32,6 @@ class OAuth2AuthenticationSuccessHandler(
             .toUriString()
 
         println("소셜 로그인 성공")
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        redirectStrategy.sendRedirect(request, response, targetUrl)
     }
 }
